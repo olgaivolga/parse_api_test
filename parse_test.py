@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-# -*- coding: cp1251 -*-
+# -*- coding: utf8 -*-
+# vim: set ts=4 sts=4 sw=4 et:
 
 import json
 import httplib
@@ -87,11 +88,11 @@ class TestFunction(unittest.TestCase):
                "X-Parse-REST-API-Key": self.parseKey 
              })
         result = json.loads(connection.getresponse().read())
-        self.assertEquals(TestFunction.obj, result['objectId'])
-        self.assertEquals('Sean Plott', result['playerName'])
+        self.assertEqual(TestFunction.obj, result['objectId'])
+        self.assertEqual('Sean Plott', result['playerName'])
         self.assertFalse(result['cheatMode'])
-        self.assertEquals(1337, result['score'])
-        self.assertEquals(result['createdAt'], result['updatedAt'])
+        self.assertEqual(1337, result['score'])
+        self.assertEqual(result['createdAt'], result['updatedAt'])
 
 
     def put(self):
@@ -110,6 +111,7 @@ class TestFunction(unittest.TestCase):
         self.assertTrue(validate_date(updatedAt_got))
 
     def updated(self):
+        print "Testing updated item..."
         connection = httplib.HTTPSConnection('api.parse.com', 443)
         connection.connect()
         connection.request('GET', '/1/classes/GameScore/'+TestFunction.obj, '', {
@@ -117,7 +119,8 @@ class TestFunction(unittest.TestCase):
                "X-Parse-REST-API-Key": self.parseKey
              })
         result = json.loads(connection.getresponse().read())
-        print result
+        self.assertEqual(73453, result['score'])
+        self.assertNotEqual(result['createdAt'], result['updatedAt'])
 
 
 if __name__ == '__main__':
